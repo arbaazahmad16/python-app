@@ -1,11 +1,13 @@
 from flask import Flask
-import os
+from redis import Redis
 
 app = Flask(__name__)
+redis = Redis(host='redis', port=6379)
 
 @app.route('/')
 def hello():
-    return '<h1 style="color:orange">Welcome to Java Home Docker App </h1>'
+    count = redis.incr('hits')
+    return 'Hello world!!! I am running in a docker container & I have been seen {} times.\n'.format(count) 
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", debug=True)
